@@ -1,6 +1,7 @@
 from . import ex, _algs, _CONE_args, _GRASP_args, _GW_args, _ISO_args, _KLAU_args, _LREA_args, _NET_args, _NSD_args, _REGAL_args,_Grampa_args,_GrampaS_args
 from generation import generate as gen
-from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, Fugal, isorank2 as isorank,Grampa,Fugal,GrampaS,Fugal
+#from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, Fugal, isorank2 as isorank,Grampa,Fugal,GrampaS,Fugal
+from algorithms import Fugal, Cugal
 import networkx as nx
 import numpy as np
 

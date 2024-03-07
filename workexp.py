@@ -53,16 +53,16 @@ def global_config():
         # 5,      # mnc
     ]
 
-    algs = [_algs[i] for i in run]
+    algs = [_algs[i] for i in range(2)]
 
     mall = False
+#
+#    if mall:
+#        algs = [
+#            (alg, args, [1, 2, 3, 30, -1, -2, -3, -30], algname) for alg, args, _, algname in algs
+#        ]
 
-    if mall:
-        algs = [
-            (alg, args, [1, 2, 3, 30, -1, -2, -3, -30], algname) for alg, args, _, algname in algs
-        ]
-
-    acc_names = [_acc_names[i] for i in accs]
+    acc_names = [_acc_names[i] for i in range(1)]
 
     tmp = []
 
@@ -195,7 +195,8 @@ def playground():
 
 
 @ex.automain
-def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
+def main(_run, _log, verbose=True, load=[], plot=[], nice=12, mon=False):
+    print("main")
 
     path = f"runs/{_run._id}"
 
@@ -207,13 +208,15 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
 
     # try:
     if not verbose:
-        sys.stdout = open(os.devnull, 'w')
-        sys.stderr = open(os.devnull, 'w')
+        sys.stdout = open("~null", 'w')
+        sys.stderr = open("~null", 'w')
         algorithms.GWL.dev.util.logger.disabled = True
 
     try:
+        print("trying")
         os.nice(nice)
     except Exception:
+        print("Passing")
         pass
 
     # if mon:
@@ -258,6 +261,7 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
     open(f"{path}/_randcheck.txt", "w").write(str(randcheck))
 
     if len(load) > 2:
+        print("?")
         time5 = np.load(f"{load_path(load[2])}/_time5.npy")
         res6 = np.load(f"{load_path(load[2])}/_res6.npy")
         # time = np.load(f"{load_path(load[2])}/_time4.npy")
@@ -267,6 +271,7 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
         # res = np.expand_dims(res, axis=0)
         # res6 = np.expand_dims(res, axis=0)
     else:
+        print(path)
         time5, res6 = run_exp(G, path)
 
     np.save(f"{path}/_time5", time5)

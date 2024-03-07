@@ -1,7 +1,8 @@
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
 import logging
-from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP
+#from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP
+from algorithms import Fugal, Cugal
 #GraspBafter Grampa
 
 ex = Experiment("ex")
@@ -211,25 +212,32 @@ _Fugal2_args={
     'mu': 0.3,#1 MM,are,net --0.1 ce--2 eu
 }
 
-_algs = [
-    (gwl, _GW_args, [3], "GW"),
-    (conealign, _CONE_args, [-3], "CONE"),
-    (grasp, _GRASP_args, [-3], "GRASP"),
-    (regal, _REGAL_args, [-3], "REGAL"),
-    (eigenalign, _LREA_args, [3], "LREA"),
-    (NSD, _NSD_args, [30], "NSD"),
+_Cugal_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+}
 
-    (isorank, _ISO_args, [3], "ISO"),
-    (netalign, _NET_args, [3], "NET"),
-    (klaus, _KLAU_args, [3], "KLAU"),
-    (sgwl, _SGW_args, [3], "SGW"),
-    (Grampa, _Grampa_args, [3], "GRAMPA"),
-    (GraspB, _GRASPB_args, [-96], "GRASPB"),
+_algs = [
+    #(gwl, _GW_args, [3], "GW"),
+    #(conealign, _CONE_args, [-3], "CONE"),
+    #(grasp, _GRASP_args, [-3], "GRASP"),
+    #(regal, _REGAL_args, [-3], "REGAL"),
+    #(eigenalign, _LREA_args, [3], "LREA"),
+    #(NSD, _NSD_args, [30], "NSD"),
+
+    #(isorank, _ISO_args, [3], "ISO"),
+    #(netalign, _NET_args, [3], "NET"),
+    #(klaus, _KLAU_args, [3], "KLAU"),
+    #(sgwl, _SGW_args, [3], "SGW"),
+    #(Grampa, _Grampa_args, [3], "GRAMPA"),
+    #(GraspB, _GRASPB_args, [-96], "GRASPB"),
     #(Fugal2, _Fugal_args, [3], "FUGALB"),
     #(GrampaS, _GrampaS_args, [4], "GRAMPAS"),
     (Fugal, _Fugal_args, [3], "FUGAL"),
-    (Fugal2, _Fugal2_args, [3], "FUGALB"),
-    (QAP, _Fugal_args, [3], "QAP"),
+    (Cugal, _Cugal_args, [3], "CUGAL")
+    #(Fugal2, _Fugal2_args, [3], "FUGALB"),
+    #(QAP, _Fugal_args, [3], "QAP"),
 
 ]   
 
