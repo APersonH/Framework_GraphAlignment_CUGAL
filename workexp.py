@@ -53,7 +53,7 @@ def global_config():
         # 5,      # mnc
     ]
 
-    algs = [_algs[i] for i in range(2)]
+    algs = [_algs[i] for i in run]
 
     mall = False
 #
@@ -196,7 +196,6 @@ def playground():
 
 @ex.automain
 def main(_run, _log, verbose=True, load=[], plot=[], nice=12, mon=False):
-    print("main")
 
     path = f"runs/{_run._id}"
 
@@ -213,10 +212,8 @@ def main(_run, _log, verbose=True, load=[], plot=[], nice=12, mon=False):
         algorithms.GWL.dev.util.logger.disabled = True
 
     try:
-        print("trying")
         os.nice(nice)
     except Exception:
-        print("Passing")
         pass
 
     # if mon:

@@ -4,9 +4,39 @@ from generation import generate as gen
 from algorithms import Fugal, Cugal
 import networkx as nx
 import numpy as np
+from enum import Enum
 
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
+class Algs(Enum):
+    FUGAL = 0
+    CUGAL = 1
+
+class Data(Enum):
+    CA-NETSCINCE = "ca-netscience",            # 379   / 914   / connected
+    VOLES = "voles",
+    HIGH-SCHOOL = "high-school",
+    YEAST = "yeast",
+    MULTIMAGNA = "MultiMagna",
+    BIO-CELEGANS = "bio-celegans",             # 453   / 2k    / connected
+    IN-ARENAS = "in-arenas",                   # 1.1k  / 5.4k  / connected
+    ARENAD = "arenad",
+    INF-EUROROAD = "inf-euroroad",             # 1.2K  / 1.4K  / disc - 200
+    INF-POWER = "inf-power",                   # 4.9K  / 6.6K  / connected
+    CA-GRQC = "ca-GrQc",                       # 4.2k  / 13.4K / connected - (5.2k  / 14.5K)?
+    BIO-DMELA = "bio-dmela",                   # 7.4k  / 25.6k / connected
+    CA-ASTROPH = "CA-AstroPh",                 # 18k   / 195k  / connected
+    SOC-HAMSTERSTER = "soc-hamsterster",       # 2.4K  / 16.6K / disc - 400
+    SOCFB-BOWDOIN47 = "socfb-Bowdoin47",       # 2.3K  / 84.4K / disc - only 2
+    SOCFB-HAMILTON46 = "socfb-Hamilton46",     # 2.3K  / 96.4K / disc - only 2
+    SOCFB-HAVERFORD76 = "socfb-Haverford76",   # 1.4K  / 59.6K / connected
+    SOCFB-SWARTHMORE42 = "socfb-Swarthmore42", # 1.7K  / 61.1K / disc - only 2
+    SOC-FACEBOOK = "soc-facebook",
+    SCC_ENRONONLY = "scc_enron-only",
+    SCC_FB-FORUM = "scc_fb-forum",
+    SCC_FB-MESSAGES = "scc_fb-messages",
+    SCC_INFECT-HYPER = "scc_infect-h,"         # 4k    / 87k   / connected
+    CA-ERDOS = "ca-Erdos992",                            # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
 
 def aaa(vals, dist_type=0):
     g = []
@@ -353,15 +383,35 @@ def rgraphs(gnames):
 
 
 @ ex.named_config
+def cugal_test():
+    run = [1]
+    iters = 1
+    graph_names = [
+        Data.CA-NETSCINCE
+    ]
+    graphs = rgraphs(graph_names)
+    noises = [
+        0.00
+    ]
+
+@ ex.named_config
+def fugal_test():
+    run = [0]
+    iters = 1
+    graph_names = [ "ca-netscience" ]
+    graphs = rgraphs(graph_names)
+    noises = [ 0.00 ]
+
+@ ex.named_config
 def real():
 
     #run = [1, 2, 3, 4, 5, 6]
-    run = [14]
+    run = [1]
     #run=[13,14,15]
     iters = 2
     #print("start")
     graph_names = [             # n     / e
-        "ca-netscience",       # 379   / 914   / connected
+        #"ca-netscience",       # 379   / 914   / connected
         #"voles",
         #"high-school",
         #"yeast",
@@ -415,10 +465,10 @@ def synthetic():
 
     # use with 'mall'
 
-    iters = 2
+    iters = 1
     #run = [1,6,9,10,11,14,15]
     #run = [1,6,14,15] #9,10,11
-    run=[9]
+    run=[0, 1]
     graph_names = [
         #"arenas",
         #"powerlaw",
@@ -431,7 +481,7 @@ def synthetic():
         #"nw_str1024",
         #"nw_str2048",
         #"nw_str4096",
-        "nw_str8192",
+        #"nw_str8192",
     ]
 
     graphs = [
@@ -457,10 +507,10 @@ def synthetic():
         #(nx.newman_watts_strogatz_graph, (128, 7,0.5)),
         #(nx.newman_watts_strogatz_graph, (256, 7,0.5)),
         #(nx.newman_watts_strogatz_graph, (512, 7,0.5)),
-        #(nx.newman_watts_strogatz_graph, (1024, 7,0.5)),
+        nx.newman_watts_strogatz_graph, (1024, 7, 0.5),
         #(nx.newman_watts_strogatz_graph, (2048, 7,0.5)),
         #(nx.newman_watts_strogatz_graph, (4096, 7,0.5)),
-        (nx.newman_watts_strogatz_graph, (8192, 7,0.5)),
+        #(nx.newman_watts_strogatz_graph, (8192, 7,0.5)),
         #
         #(nx.newman_watts_strogatz_graph, (1024, 50,0.5)),
         #(nx.newman_watts_strogatz_graph, (1024, 100,0.5)),
@@ -470,10 +520,10 @@ def synthetic():
     ]
 
     noises = [
-        #0.00,
-        #0.01,
+        0.00,
+        0.01,
         #0.02,
-        #0.03,
+        0.03,
         #0.04,
         0.05,
         #0.06,

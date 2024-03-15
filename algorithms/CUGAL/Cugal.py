@@ -7,8 +7,10 @@ import torch
 def main(data, iter, simple, mu):
     print("Cugal")
 
-    config = Config(device="cuda", sinkhorn_method=SinkhornMethod.LOG, dtype=torch.float32)
-
+    config = Config(device="cuda", 
+        sinkhorn_method=SinkhornMethod.LOG, 
+        dtype=torch.float32,
+    )
     Src = data['Src']
     Tar = data['Tar']
     for i in range(Src.shape[0]):
