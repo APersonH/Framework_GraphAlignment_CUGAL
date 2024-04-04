@@ -83,6 +83,12 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
             ['python', 'monitor.py', output_path], shell=False)
         time.sleep(2)
     start = time.time()
+    
+    if "path" in args:
+        if args["path"] == "cugal": 
+            args = args.copy()
+            args["path"] = f"runs/{_run._id}"
+    
     res = alg_exe(alg, data, args)
     time1.append(time.time()-start)
     if mon:

@@ -198,11 +198,11 @@ def init1(graphs, iters):
 
     #     randcheck = path
     print("init1")
-    print(graphs)
-    alg, args = graphs[0]
+    graphs = zip(graphs[::2], graphs[1::2])
     S_G = [
-        [alg(*args) for _ in range(iters)]
+        [alg(*args) for _ in range(iters)] for alg, args in graphs
     ]
+
 
     return S_G, np.random.rand(1)[0]
 

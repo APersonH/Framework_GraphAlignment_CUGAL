@@ -216,6 +216,16 @@ _Cugal_args={
     'iter': 15,
     'simple': True,
     'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    'sparse': False
+}
+
+_Cugal_sparse_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    'sparse': True
 }
 
 _algs = [
@@ -235,7 +245,8 @@ _algs = [
     #(Fugal2, _Fugal_args, [3], "FUGALB"),
     #(GrampaS, _GrampaS_args, [4], "GRAMPAS"),
     (Fugal, _Fugal_args, [3], "FUGAL"),
-    (Cugal, _Cugal_args, [3], "CUGAL")
+    (Cugal, _Cugal_args, [3], "CUGAL"),
+    (Cugal, _Cugal_sparse_args, [3], "CUGAL_Sparse")
     #(Fugal2, _Fugal2_args, [3], "FUGALB"),
     #(QAP, _Fugal_args, [3], "QAP"),
 

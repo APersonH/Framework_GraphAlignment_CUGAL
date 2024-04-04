@@ -11,32 +11,33 @@ from enum import Enum
 class Algs(Enum):
     FUGAL = 0
     CUGAL = 1
+    CUGAL_SPARSE = 2
 
 class Data(Enum):
-    CA-NETSCINCE = "ca-netscience",            # 379   / 914   / connected
+    CA_NETSCIENCE = "ca-netscience",            # 379   / 914   / connected
     VOLES = "voles",
-    HIGH-SCHOOL = "high-school",
+    HIGH_SCHOOL = "high-school",
     YEAST = "yeast",
     MULTIMAGNA = "MultiMagna",
-    BIO-CELEGANS = "bio-celegans",             # 453   / 2k    / connected
-    IN-ARENAS = "in-arenas",                   # 1.1k  / 5.4k  / connected
+    BIO_CELEGANS = "bio-celegans",             # 453   / 2k    / connected
+    IN_ARENAS = "in-arenas",                   # 1.1k  / 5.4k  / connected
     ARENAD = "arenad",
-    INF-EUROROAD = "inf-euroroad",             # 1.2K  / 1.4K  / disc - 200
-    INF-POWER = "inf-power",                   # 4.9K  / 6.6K  / connected
-    CA-GRQC = "ca-GrQc",                       # 4.2k  / 13.4K / connected - (5.2k  / 14.5K)?
-    BIO-DMELA = "bio-dmela",                   # 7.4k  / 25.6k / connected
-    CA-ASTROPH = "CA-AstroPh",                 # 18k   / 195k  / connected
-    SOC-HAMSTERSTER = "soc-hamsterster",       # 2.4K  / 16.6K / disc - 400
-    SOCFB-BOWDOIN47 = "socfb-Bowdoin47",       # 2.3K  / 84.4K / disc - only 2
-    SOCFB-HAMILTON46 = "socfb-Hamilton46",     # 2.3K  / 96.4K / disc - only 2
-    SOCFB-HAVERFORD76 = "socfb-Haverford76",   # 1.4K  / 59.6K / connected
-    SOCFB-SWARTHMORE42 = "socfb-Swarthmore42", # 1.7K  / 61.1K / disc - only 2
-    SOC-FACEBOOK = "soc-facebook",
+    INF_EUROROAD = "inf-euroroad",             # 1.2K  / 1.4K  / disc - 200
+    INF_POWER = "inf-power",                   # 4.9K  / 6.6K  / connected
+    CA_GRQC = "ca-GrQc",                       # 4.2k  / 13.4K / connected - (5.2k  / 14.5K)?
+    BIO_DMELA = "bio-dmela",                   # 7.4k  / 25.6k / connected
+    CA_ASTROPH = "CA-AstroPh",                 # 18k   / 195k  / connected
+    SOC_HAMSTERSTER = "soc-hamsterster",       # 2.4K  / 16.6K / disc - 400
+    SOCFB_BOWDOIN47 = "socfb-Bowdoin47",       # 2.3K  / 84.4K / disc - only 2
+    SOCFB_HAMILTON46 = "socfb-Hamilton46",     # 2.3K  / 96.4K / disc - only 2
+    SOCFB_HAVERFORD76 = "socfb-Haverford76",   # 1.4K  / 59.6K / connected
+    SOCFB_SWARTHMORE42 = "socfb-Swarthmore42", # 1.7K  / 61.1K / disc - only 2
+    SOC_FACEBOOK = "soc-facebook",
     SCC_ENRONONLY = "scc_enron-only",
-    SCC_FB-FORUM = "scc_fb-forum",
-    SCC_FB-MESSAGES = "scc_fb-messages",
-    SCC_INFECT-HYPER = "scc_infect-h,"         # 4k    / 87k   / connected
-    CA-ERDOS = "ca-Erdos992",                            # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
+    SCC_FB_FORUM = "scc_fb-forum",
+    SCC_FB_MESSAGES = "scc_fb-messages",
+    SCC_INFECT_HYPER = "scc_infect-h,"         # 4k    / 87k   / connected
+    CA_ERDOS = "ca-Erdos992",                  # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
 
 def aaa(vals, dist_type=0):
     g = []
@@ -384,12 +385,14 @@ def rgraphs(gnames):
 
 @ ex.named_config
 def cugal_test():
-    run = [1]
+    run = [
+        Algs.CUGAL_SPARSE.value
+    ]
     iters = 1
     graph_names = [
-        Data.CA-NETSCINCE
+        Data.CA_ASTROPH.value[0]
     ]
-    graphs = rgraphs(graph_names)
+    graphs = rgraphs(graph_names)[0]
     noises = [
         0.00
     ]
@@ -406,7 +409,7 @@ def fugal_test():
 def real():
 
     #run = [1, 2, 3, 4, 5, 6]
-    run = [1]
+    run = [Algs.CUGAL]
     #run=[13,14,15]
     iters = 2
     #print("start")
@@ -468,7 +471,7 @@ def synthetic():
     iters = 1
     #run = [1,6,9,10,11,14,15]
     #run = [1,6,14,15] #9,10,11
-    run=[0, 1]
+    run=[1]
     graph_names = [
         #"arenas",
         #"powerlaw",
@@ -504,13 +507,13 @@ def synthetic():
         #(nx.algorithms.bipartite.random_graph,(450,450,0.06)),
         #(nx.algorithms.bipartite.random_graph,(200,700,0.09)),
         #(nx.algorithms.bipartite.random_graph,(800,600,0.05))
-        #(nx.newman_watts_strogatz_graph, (128, 7,0.5)),
-        #(nx.newman_watts_strogatz_graph, (256, 7,0.5)),
-        #(nx.newman_watts_strogatz_graph, (512, 7,0.5)),
+        nx.newman_watts_strogatz_graph, ( 128, 7, 0.5),
+        nx.newman_watts_strogatz_graph, ( 256, 7, 0.5),
+        nx.newman_watts_strogatz_graph, ( 512, 7, 0.5),
         nx.newman_watts_strogatz_graph, (1024, 7, 0.5),
-        #(nx.newman_watts_strogatz_graph, (2048, 7,0.5)),
-        #(nx.newman_watts_strogatz_graph, (4096, 7,0.5)),
-        #(nx.newman_watts_strogatz_graph, (8192, 7,0.5)),
+        #nx.newman_watts_strogatz_graph, (2048, 7, 0.5),
+        #(nx.newman_watts_strogatz_graph, (4096, 7,0.5),
+        #(nx.newman_watts_strogatz_graph, (8192, 7,0.5),
         #
         #(nx.newman_watts_strogatz_graph, (1024, 50,0.5)),
         #(nx.newman_watts_strogatz_graph, (1024, 100,0.5)),
@@ -520,12 +523,12 @@ def synthetic():
     ]
 
     noises = [
-        0.00,
+        #0.00,
         0.01,
         #0.02,
-        0.03,
+        #0.03,
         #0.04,
-        0.05,
+        #0.05,
         #0.06,
         #0.07,
         #0.08,

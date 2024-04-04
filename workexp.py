@@ -275,7 +275,7 @@ def main(_run, _log, verbose=True, load=[], plot=[], nice=12, mon=False):
     np.save(f"{path}/_res6", res6)
 
     os.makedirs(f"{path}/res")
-    save(time5, res6, f"{path}/res")
+    #save(time5, res6, f"{path}/res")
 
     # if mon:
     #     proc.send_signal(signal.SIGINT)
