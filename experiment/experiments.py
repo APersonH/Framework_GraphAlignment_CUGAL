@@ -390,7 +390,7 @@ def cugal_test():
     ]
     iters = 1
     graph_names = [
-        Data.CA_ASTROPH.value[0]
+        Data.CA_NETSCIENCE.value[0]
     ]
     graphs = rgraphs(graph_names)[0]
     noises = [
