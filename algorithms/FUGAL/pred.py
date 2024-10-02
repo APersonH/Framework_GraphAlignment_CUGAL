@@ -133,9 +133,13 @@ def convex_init(A, B, D, mu, niter):
     for i in range(niter):
         for it in range(1, 11):
             G=-torch.mm(torch.mm(A.T, P), B)-torch.mm(torch.mm(A, P), B.T)+ K + i*(mat_ones - 2*P)
+            #Save gradient to file for debugging. Add the iteration number to the filename.
+            np.savetxt("G" + str(i) + ".csv", G.cpu().numpy(), delimiter=",")
             q = sinkhorn(ones, ones, G, reg, maxIter = 500, stopThr = 1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
+        #Save P to file for debugging. Add the iteration number to the filename.
+        np.savetxt("P" + str(i) + ".csv", P.cpu().numpy(), delimiter=",")
     return P
 def convex_initQAP(A, B, niter):
     n = len(A)

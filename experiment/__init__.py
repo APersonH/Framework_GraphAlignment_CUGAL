@@ -1,9 +1,11 @@
+import torch
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
 import logging
 #from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP
 from algorithms import Fugal, Cugal
 #GraspBafter Grampa
+from cugal.config import SinkhornMethod, HungarianMethod
 
 ex = Experiment("ex")
 
@@ -203,7 +205,7 @@ _Fugal_args={
     'iter': 15,
     #'iter': 15, for xx dataset.
     'simple': True,
-    'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+    'mu': 2,#1 MM,are,net --0.1 ce--2 eu
 }
 _Fugal2_args={
     'iter': 15,
@@ -215,9 +217,11 @@ _Fugal2_args={
 _Cugal_args={
     'iter': 15,
     'simple': True,
-    'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+    'mu': 2,#1 MM,are,net --0.1 ce--2 eu
     'path': "cugal",
-    'sparse': False
+    'sparse': False,
+    'cache': 1,
+    'sinkhorn_method': SinkhornMethod.MIX,
 }
 
 _Cugal_sparse_args={
@@ -225,10 +229,117 @@ _Cugal_sparse_args={
     'simple': True,
     'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
     'path': "cugal",
-    'sparse': True
+    'sparse': True,
+    'cache': 0,
+    'sinkhorn_method': SinkhornMethod.MIX,
+    'sinkhorn_iterations': 1000,
+    'sinkhorn_threshold': 1e-3,
+
 }
 
-_algs = [
+_Cugal_sparse_cache_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 2,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    'sparse': True,
+    'cache': 1,
+    'sinkhorn_method': SinkhornMethod.MIX,
+    'sinkhorn_iterations': 1000,
+    'sinkhorn_threshold': 1e-3,
+}
+
+_Cugal_sparse_cache_log_args = dict( _Cugal_sparse_cache_args, sinkhorn_method=SinkhornMethod.LOG)
+_Cugal_sparse_cache_mix_args = dict( _Cugal_sparse_cache_args, sinkhorn_method=SinkhornMethod.MIX)
+
+_Cugal_mix_lambda_pol_args = dict( _Cugal_sparse_cache_mix_args, lambda_func = lambda x: x**2)
+_Cugal_mix_lambda_exp_args = dict( _Cugal_sparse_cache_mix_args, lambda_func = lambda x: 2**x)
+
+_Cugal_mix_fw_001_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=0.01)
+_Cugal_mix_fw_005_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=0.05)
+_Cugal_mix_fw_010_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=0.1)
+_Cugal_mix_fw_020_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=0.2)
+_Cugal_mix_fw_050_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=0.5)
+_Cugal_mix_fw_100_args = dict( _Cugal_sparse_cache_mix_args, frank_wolfe_threshold=1.0)
+
+_Cugal_log_fw_010_args = dict( _Cugal_sparse_cache_log_args, frank_wolfe_threshold=0.1)
+_Cugal_log_fw_020_args = dict( _Cugal_sparse_cache_log_args, frank_wolfe_threshold=0.2)
+
+
+_Cugal_cache_test_02_args = dict( _Cugal_sparse_cache_mix_args, cache=2)
+_Cugal_cache_test_03_args = dict( _Cugal_sparse_cache_mix_args, cache=3)
+_Cugal_cache_test_05_args = dict( _Cugal_sparse_cache_mix_args, cache=5)
+_Cugal_cache_test_10_args = dict( _Cugal_sparse_cache_mix_args, cache=10)
+
+
+_Cugal_hungarian_test = _Cugal_sparse_cache_mix_args.copy()
+_Cugal_hungarian_CuLAP = dict( _Cugal_hungarian_test)#, hungarian=HungarianMethod.CULAP)
+_Cugal_hungarian_rand_test = dict( _Cugal_hungarian_test, hungarian=HungarianMethod.RAND)
+_Cugal_mix_hungarian_more_greed_test = dict( _Cugal_hungarian_test, hungarian=HungarianMethod.DOUBLE_GREEDY)
+_Cugal_log_hungarian_more_greed_test = dict( _Cugal_sparse_cache_log_args, hungarian=HungarianMethod.DOUBLE_GREEDY)
+_Cugal_hungarian_entro_greedy = dict( _Cugal_hungarian_test)#, hungarian=HungarianMethod.ENTRO_GREEDY)
+_Cugal_hungarian_parallel_greedy = dict( _Cugal_hungarian_test, hungarian=HungarianMethod.PARALLEL_GREEDY)
+_Cugal_JV_args = dict(_Cugal_sparse_cache_mix_args)#, hungarian=HungarianMethod.JV)
+_Cugal_log_sparse_hungarian = dict( _Cugal_sparse_cache_log_args, hungarian=HungarianMethod.SPARSE)
+
+_Cugal_hungarian_test_FW_20 = dict( _Cugal_hungarian_test, frank_wolfe_threshold=0.2)
+_Cugal_hungarian_CuLAP_FW_20 = dict( _Cugal_hungarian_CuLAP, frank_wolfe_threshold=0.2)
+_Cugal_hungarian_rand_FW_20 = dict( _Cugal_hungarian_rand_test, frank_wolfe_threshold=0.2)
+_Cugal_mix_hungarian_more_greed_FW_10 = dict( _Cugal_mix_hungarian_more_greed_test, frank_wolfe_threshold=0.1)
+_Cugal_mix_hungarian_more_greed_FW_20 = dict( _Cugal_mix_hungarian_more_greed_test, frank_wolfe_threshold=0.2)
+_Cugal_hungarian_entro_greedy_FW_20 = dict( _Cugal_hungarian_entro_greedy, frank_wolfe_threshold=0.2)
+_Cugal_hungarian_parallel_greedy_FW_20 = dict( _Cugal_hungarian_parallel_greedy, frank_wolfe_threshold=0.2)
+_Cugal_JV_FW20 = dict(_Cugal_JV_args, frank_wolfe_threshold=0.2)
+_Cugal_log_hungarian_more_greed_FW_10 = dict( _Cugal_log_hungarian_more_greed_test, frank_wolfe_threshold=0.1)
+_Cugal_log_hungarian_more_greed_FW_20 = dict( _Cugal_log_hungarian_more_greed_test, frank_wolfe_threshold=0.2)
+
+_Cugal_mix_sink_thres_1e_3 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=1e-3)
+_Cugal_mix_sink_thres_1e_4 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=1e-4)
+_Cugal_mix_sink_thres_1e_2 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=1e-2)
+_Cugal_mix_sink_thres_1e_6 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=1e-6)
+_Cugal_log_sink_thres_1e_3 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=1e-3)
+_Cugal_log_sink_thres_1e_4 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=1e-4)
+_Cugal_log_sink_thres_1e_2 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=1e-2)
+_Cugal_log_sink_thres_1e_6 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=1e-6)
+_Cugal_log_sink_thres_1e_1 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=0.1)
+_Cugal_mix_sink_thres_1e_1 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=0.1)
+_Cugal_log_sink_thres_03 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=0.3)
+_Cugal_log_sink_thres_05 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=0.5)
+_Cugal_log_sink_thres_10 = dict( _Cugal_sparse_cache_log_args, sinkhorn_threshold=1.0)
+_Cugal_mix_sink_thres_03 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=0.3)
+_Cugal_mix_sink_thres_05 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=0.5)
+_Cugal_mix_sink_thres_10 = dict( _Cugal_sparse_cache_mix_args, sinkhorn_threshold=1.0)
+
+_Cugal_OT_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 1,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    'device': 'cpu',
+    #'sinkhorn_method': SinkhornMethod.OT_CPU
+}
+
+_Cugal_OT_GPU_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 0.5,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    #'sinkhorn_method': SinkhornMethod.OT_GPU
+}
+
+_Cugal_CPU_args={
+    'iter': 15,
+    'simple': True,
+    'mu': 2,#1 MM,are,net --0.1 ce--2 eu
+    'path': "cugal",
+    'device': 'cpu',
+    'sinkhorn_method': SinkhornMethod.STANDARD,
+    'dtype': torch.float64,
+    'use_fugal': True,
+}
+
+
+_algs = [ # (alg, args, ?, name)
     #(gwl, _GW_args, [3], "GW"),
     #(conealign, _CONE_args, [-3], "CONE"),
     #(grasp, _GRASP_args, [-3], "GRASP"),
@@ -244,9 +355,64 @@ _algs = [
     #(GraspB, _GRASPB_args, [-96], "GRASPB"),
     #(Fugal2, _Fugal_args, [3], "FUGALB"),
     #(GrampaS, _GrampaS_args, [4], "GRAMPAS"),
-    (Fugal, _Fugal_args, [3], "FUGAL"),
-    (Cugal, _Cugal_args, [3], "CUGAL"),
-    (Cugal, _Cugal_sparse_args, [3], "CUGAL_Sparse")
+    (Fugal, _Fugal_args, [3], "FUGAL"), # 0
+    (Cugal, _Cugal_args, [3], "CUGAL"), # 1
+    (Cugal, _Cugal_sparse_args, [3], "CUGAL_Sparse"), # 2 
+    (Cugal, _Cugal_sparse_cache_args, [3], "CUGAL_Sparse"), # 3
+    (Cugal, _Cugal_sparse_cache_log_args, [3], "CUGAL_Sparse_LOG"), # 4
+    (Cugal, _Cugal_sparse_cache_mix_args, [3], "CUGAL_Sparse_MIX"), # 5
+    (Cugal, _Cugal_OT_args, [3], "CUGAL_OT"), # 6
+    (Cugal, _Cugal_OT_GPU_args, [3], "CUGAL_OT_GPU"), # 7
+    (Cugal, _Cugal_mix_fw_001_args, [3], "CUGAL_FW_001"), # 8
+    (Cugal, _Cugal_mix_fw_005_args, [3], "CUGAL_FW_005"), # 9
+    (Cugal, _Cugal_mix_fw_010_args, [3], "CUGAL_FW_010"),
+    (Cugal, _Cugal_mix_fw_020_args, [3], "CUGAL_FW_020"), # 11
+    (Cugal, _Cugal_mix_fw_050_args, [3], "CUGAL_FW_050"),
+    (Cugal, _Cugal_mix_fw_100_args, [3], "CUGAL_FW_100"),
+    (Cugal, _Cugal_cache_test_02_args, [3], "CUGAL_CACHE_02"), # 14
+    (Cugal, _Cugal_cache_test_03_args, [3], "CUGAL_CACHE_03"),
+    (Cugal, _Cugal_cache_test_05_args, [3], "CUGAL_CACHE_05"),
+    (Cugal, _Cugal_cache_test_10_args, [3], "CUGAL_CACHE_10"),
+    (Cugal, _Cugal_hungarian_test_FW_20, [3], "CUGAL_HUNGARIAN_FW_20"), # 18
+    (Cugal, _Cugal_hungarian_rand_test, [3], "CUGAL_HUNGARIAN_RAND"),
+    (Cugal, _Cugal_mix_hungarian_more_greed_test, [3], "CUGAL_HUNGARIAN_MORE_GREEDy"), # 20
+    (Cugal, _Cugal_hungarian_rand_FW_20, [3], "CUGAL_HUNGARIAN_RAND_FW_20"),
+    (Cugal, _Cugal_mix_hungarian_more_greed_FW_20, [3], "CUGAL_HUNGARIAN_MORE_GREEDY_FW_20"), # 22
+    (Cugal, _Cugal_hungarian_entro_greedy, [3], "CUGAL_HUNGARIAN_ENTRO_GREEDY"),
+    (Cugal, _Cugal_hungarian_entro_greedy_FW_20, [3], "CUGAL_HUNGARIAN_ENTRO_GREEDY_FW_20"), 
+    (Cugal, _Cugal_CPU_args, [3], "CUGAL_CPU"), # 25
+    (Cugal, _Cugal_JV_args, [3], "CUGAL_JV"), # 26
+    (Cugal, _Cugal_JV_FW20, [3], "CUGAL_JV_FW20"), # 27
+    (Cugal, _Cugal_hungarian_parallel_greedy, [3], "CUGAL_HUNGARIAN_PARALLEL_GREEDY"), # 28
+    (Cugal, _Cugal_hungarian_parallel_greedy_FW_20, [3], "CUGAL_HUNGARIAN_PARALLEL_GREEDY_FW_20"), # 29
+    (Cugal, _Cugal_hungarian_CuLAP, [3], "CUGAL_HUNGARIAN_CULAP"), # 30
+    (Cugal, _Cugal_hungarian_CuLAP_FW_20, [3], "CUGAL_HUNGARIAN_CULAP_FW_20"), # 31
+    (Cugal, _Cugal_mix_lambda_pol_args, [3], "CUGAL_MIX_LAMBDA_POL"), # 32
+    (Cugal, _Cugal_mix_lambda_exp_args, [3], "CUGAL_MIX_LAMBDA_EXP"),  # 33
+    (Cugal, _Cugal_mix_sink_thres_1e_3, [3], "CUGAL_MIX_SINK_1e_3"), # 34
+    (Cugal, _Cugal_mix_sink_thres_1e_4, [3], "CUGAL_MIX_SINK_1e_4"), # 35
+    (Cugal, _Cugal_mix_sink_thres_1e_2, [3], "CUGAL_MIX_SINK_1e_2"), # 36
+    (Cugal, _Cugal_mix_sink_thres_1e_6, [3], "CUGAL_MIX_SINK_1e_6"), # 37
+    (Cugal, _Cugal_log_sink_thres_1e_3, [3], "CUGAL_LOG_SINK_1e_3"), # 38
+    (Cugal, _Cugal_log_sink_thres_1e_4, [3], "CUGAL_LOG_SINK_1e_4"), # 39
+    (Cugal, _Cugal_log_sink_thres_1e_2, [3], "CUGAL_LOG_SINK_1e_2"), # 40
+    (Cugal, _Cugal_log_sink_thres_1e_6, [3], "CUGAL_LOG_SINK_1e_6"), # 41
+    (Cugal, _Cugal_log_sink_thres_1e_1, [3], "CUGAL_LOG_SINK_1e_1"), # 42
+    (Cugal, _Cugal_mix_sink_thres_1e_1, [3], "CUGAL_MIX_SINK_1e_1"), # 43
+    (Cugal, _Cugal_log_sink_thres_03, [3], "CUGAL_LOG_SINK_03"), # 44
+    (Cugal, _Cugal_log_sink_thres_05, [3], "CUGAL_LOG_SINK_05"), # 45
+    (Cugal, _Cugal_log_sink_thres_10, [3], "CUGAL_LOG_SINK_10"), # 46
+    (Cugal, _Cugal_mix_sink_thres_03, [3], "CUGAL_MIX_SINK_03"), # 47
+    (Cugal, _Cugal_mix_sink_thres_05, [3], "CUGAL_MIX_SINK_05"), # 48
+    (Cugal, _Cugal_mix_sink_thres_10, [3], "CUGAL_MIX_SINK_10"), # 49
+    (Cugal, _Cugal_log_fw_010_args, [3], "CUGAL_LOG_FW_010"), # 50
+    (Cugal, _Cugal_log_fw_020_args, [3], "CUGAL_LOG_FW_020"), # 51
+    (Cugal, _Cugal_log_hungarian_more_greed_test, [3], "CUGAL_LOG_HUNGARIAN_MORE_GREEDY"), # 52
+    (Cugal, _Cugal_log_hungarian_more_greed_FW_10, [3], "CUGAL_LOG_HUNGARIAN_MORE_GREEDY_FW_10"), # 53
+    (Cugal, _Cugal_log_hungarian_more_greed_FW_20, [3], "CUGAL_LOG_HUNGARIAN_MORE_GREEDY_FW_20"), # 54
+    (Cugal, _Cugal_mix_hungarian_more_greed_FW_10, [3], "CUGAL_HUNGARIAN_MORE_GREEDY_FW_10"), # 55
+    (Cugal, _Cugal_log_sparse_hungarian, [3], "CUGAL_LOG_SPARSE_HUNGARIAN"), # 56
+    
     #(Fugal2, _Fugal2_args, [3], "FUGALB"),
     #(QAP, _Fugal_args, [3], "QAP"),
 

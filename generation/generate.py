@@ -165,6 +165,9 @@ def generate_graphs(G, source_noise=0.00, target_noise=0.00, refill=False):
     )
 
     Tar_e = Gt[0][Src_e]
+    #print(Gt[:20])
+    #print(Src_e[:20])
+    #print(Tar_e[:20])   
 
     Src_e = remove_e(Src_e, source_noise)
     Tar_e = remove_e(Tar_e, target_noise)
@@ -198,9 +201,10 @@ def init1(graphs, iters):
 
     #     randcheck = path
     print("init1")
-    graphs = zip(graphs[::2], graphs[1::2])
+    print(graphs)
+    [print(alg, graph) for alg, graph in graphs]
     S_G = [
-        [alg(*args) for _ in range(iters)] for alg, args in graphs
+        [alg(*graph[0]) for alg, graph in graphs]
     ]
 
 

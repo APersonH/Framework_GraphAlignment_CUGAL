@@ -42,6 +42,7 @@ def format_output(res):
 # @profile
 @ex.capture
 def alg_exe(alg, data, args):
+    print("args: ", args)
     return alg.main(data=data, **args)
 
 
@@ -119,7 +120,11 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
         try:
 
             start = time.time()
+            print('mt: ', mt)
+            print('cost: ', cost)
             ma, mb = matching.getmatching(sim, cost, mt)
+            print('ma: ', ma.shape)
+            print('mb: ', mb.shape)
             elapsed = time.time()-start
 
             res1 = evaluation.evall(ma, mb, _data['Src'],

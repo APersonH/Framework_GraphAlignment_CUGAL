@@ -12,32 +12,88 @@ class Algs(Enum):
     FUGAL = 0
     CUGAL = 1
     CUGAL_SPARSE = 2
+    CUGAL_CHACHE_SPARSE = 3
+    CUGAL_CHACHE_SPARSE_LOG = 4
+    CUGAL_CHACHE_SPARSE_MIX = 5
+    CUGAL_OT = 6
+    CUGAL_OT_GPU = 7
+    CUGAL_MIX_FW_001 = 8
+    CUGAL_MIX_FW_005 = 9
+    CUGAL_MIX_FW_010 = 10
+    CUGAL_MIX_FW_020 = 11
+    CUGAL_MIX_FW_050 = 12
+    CUGAL_MIX_FW_100 = 13
+    CUGAL_CHACHE_TEST_02 = 14
+    CUGAL_CHACHE_TEST_03 = 15
+    CUGAL_CHACHE_TEST_05 = 16
+    CUGAL_CHACHE_TEST_10 = 17
+    CUGAL_HUNGARIAN_FW_20 = 18
+    CUGAL_HUNGARIAN_RAND = 19
+    CUGAL_HUNGARIAN_MORE_GREED = 20
+    CUGAL_HUNGARIAN_RAND_FW_20 = 21
+    CUGAL_HUNGARIAN_MORE_GREED_FW_20 = 22
+    CUGAL_HUNGARIAN_ENTRO_GREEDY = 23
+    CUGAL_HUNGARIAN_ENTRO_GREEDY_FW_20 = 24
+    CUGAL_CPU = 25
+    CUGAL_JV = 26
+    CUGAL_JV_FW_20 = 27
+    CUGAL_HUNGARIAN_PARALLEL_GREEDY = 28
+    CUGAL_HUNGARIAN_PARALLEL_GREEDY_FW_20 = 29
+    CUGAL_HUNGARIAN_CULAP = 30
+    CUGAL_HUNGARIAN_CULAP_FW_20 = 31
+    CUGAL_MIX_LAMBDA_POL = 32
+    CUGAL_MIX_LAMBDA_EXP = 33
+    CUGAL_MIX_SINK_THRESH_1E_3 = 34
+    CUGAL_MIX_SINK_THRESH_1E_4 = 35
+    CUGAL_MIX_SINK_THRESH_1E_2 = 36
+    CUGAL_MIX_SINK_THRESH_1E_6 = 37
+    CUGAL_LOG_SINK_THRESH_1E_3 = 38
+    CUGAL_LOG_SINK_THRESH_1E_4 = 39
+    CUGAL_LOG_SINK_THRESH_1E_2 = 40
+    CUGAL_LOG_SINK_THRESH_1E_6 = 41
+    CUGAL_LOG_SINK_THRESH_1E_1 = 42
+    CUGAL_MIX_SINK_THRESH_1E_1 = 43
+    CUGAL_LOG_SINK_THRESH_03 = 44
+    CUGAL_LOG_SINK_THRESH_05 = 45
+    CUGAL_LOG_SINK_THRESH_10 = 46
+    CUGAL_MIX_SINK_TRHESH_03 = 47
+    CUGAL_MIX_SINK_TRHESH_05 = 48
+    CUGAL_MIX_SINK_TRHESH_10 = 49
+    CUGAL_LOG_FW_10 = 50
+    CUGAL_LOG_FW_20 = 51
+    CUGAL_LOG_HUN_MORE_GREED= 52
+    CUGAL_LOG_HUN_MORE_GREED_FW_10 = 53
+    CUGAL_LOG_HUN_MORE_GREED_FW_20 = 54
+    CUGAL_MIX_HUN_MORE_GREED_FW_10 = 55
+    CUGAL_LOG_HUN_SPARSE = 56
 
 class Data(Enum):
-    CA_NETSCIENCE = "ca-netscience",            # 379   / 914   / connected
-    VOLES = "voles",
-    HIGH_SCHOOL = "high-school",
-    YEAST = "yeast",
-    MULTIMAGNA = "MultiMagna",
-    BIO_CELEGANS = "bio-celegans",             # 453   / 2k    / connected
-    IN_ARENAS = "in-arenas",                   # 1.1k  / 5.4k  / connected
-    ARENAD = "arenad",
-    INF_EUROROAD = "inf-euroroad",             # 1.2K  / 1.4K  / disc - 200
-    INF_POWER = "inf-power",                   # 4.9K  / 6.6K  / connected
-    CA_GRQC = "ca-GrQc",                       # 4.2k  / 13.4K / connected - (5.2k  / 14.5K)?
-    BIO_DMELA = "bio-dmela",                   # 7.4k  / 25.6k / connected
-    CA_ASTROPH = "CA-AstroPh",                 # 18k   / 195k  / connected
-    SOC_HAMSTERSTER = "soc-hamsterster",       # 2.4K  / 16.6K / disc - 400
-    SOCFB_BOWDOIN47 = "socfb-Bowdoin47",       # 2.3K  / 84.4K / disc - only 2
-    SOCFB_HAMILTON46 = "socfb-Hamilton46",     # 2.3K  / 96.4K / disc - only 2
-    SOCFB_HAVERFORD76 = "socfb-Haverford76",   # 1.4K  / 59.6K / connected
-    SOCFB_SWARTHMORE42 = "socfb-Swarthmore42", # 1.7K  / 61.1K / disc - only 2
-    SOC_FACEBOOK = "soc-facebook",
-    SCC_ENRONONLY = "scc_enron-only",
-    SCC_FB_FORUM = "scc_fb-forum",
-    SCC_FB_MESSAGES = "scc_fb-messages",
-    SCC_INFECT_HYPER = "scc_infect-h,"         # 4k    / 87k   / connected
-    CA_ERDOS = "ca-Erdos992",                  # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
+    CA_NETSCIENCE = "ca-netscience"            # 379   / 914   / connected
+    VOLES = "voles"
+    HIGH_SCHOOL = "high-school"
+    YEAST = [f"real world/MultiMagna/yeast{n}_Y2H1" for n in range(0, 26, 5)]
+    MULTIMAGNA = "MultiMagna"
+    BIO_CELEGANS = "bio-celegans"             # 453   / 2k    / connected
+    IN_ARENAS = "in-arenas"                   # 1.1k  / 5.4k  / connected
+    ARENAD = "arenad"
+    INF_EUROROAD = "inf-euroroad"             # 1.2K  / 1.4K  / disc - 200
+    INF_POWER = "inf-power"                   # 4.9K  / 6.6K  / connected
+    CA_GRQC = "ca-GrQc"                       # 4.2k  / 13.4K / connected - (5.2k  / 14.5K)?
+    BIO_DMELA = "bio-dmela"                   # 7.4k  / 25.6k / connected
+    CA_ASTROPH = "CA-AstroPh"                 # 18k   / 195k  / connected
+    SOC_HAMSTERSTER = "soc-hamsterster"       # 2.4K  / 16.6K / disc - 400
+    SOCFB_BOWDOIN47 = "socfb-Bowdoin47"       # 2.3K  / 84.4K / disc - only 2
+    SOCFB_HAMILTON46 = "socfb-Hamilton46"     # 2.3K  / 96.4K / disc - only 2
+    SOCFB_HAVERFORD76 = "socfb-Haverford76"   # 1.4K  / 59.6K / connected
+    SOCFB_SWARTHMORE42 = "socfb-Swarthmore42" # 1.7K  / 61.1K / disc - only 2
+    SOC_FACEBOOK = "soc-facebook"
+    SCC_ENRONONLY = "scc_enron-only"
+    SCC_FB_FORUM = "scc_fb-forum"
+    SCC_FB_MESSAGES = "scc_fb-messages"
+    SCC_INFECT_HYPER = "scc_infect-h"         # 4k    / 87k   / connected
+    CA_ERDOS = "ca-Erdos992"                  # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
+    EMAIL_ENRON = "email-Enron"               # 36K   / 183K  / connected
+    CA_HEP = "ca-HepPh-remapped"                # 12K   / 118K  / connected
 
 def aaa(vals, dist_type=0):
     g = []
@@ -319,21 +375,21 @@ def real_noisetest():
 @ex.named_config
 def real_noise():
 
-   # tmp = [
-   #     "data/real world/contacts-prox-high-school-2013/contacts-prox-high-school-2013_100.txt",
-    #    [
-    #        f"data/real world/contacts-prox-high-school-2013/contacts-prox-high-school-2013_{i}.txt" for i in [
-    #            99, 95, 90, 80]
-    #    ]
+    #tmp = [
+    #   "data/real world/contacts-prox-high-school-2013/contacts-prox-high-school-2013_100.txt",
+    #   [
+    #       f"data/real world/contacts-prox-high-school-2013/contacts-prox-high-school-2013_{i}.txt" for i in [
+    #           99, 95, 90, 80]
+    #   ]
     #]
-   # xlabel = "high-school-2013"
+    #xlabel = "high-school-2013"
 
    # tmp = [
    #     "data/real world/mamalia-voles-plj-trapping/mammalia-voles-plj-trapping_100.txt",
    #     [
    #         f"data/real world/mamalia-voles-plj-trapping/mammalia-voles-plj-trapping_{i}.txt" for i in [
    #             99, 95, 90, 80]
-    #    ]
+   #     ]
    #  ]
    # xlabel = "mammalia-voles"
 
@@ -341,7 +397,7 @@ def real_noise():
         "data/real world/MultiMagna/yeast0_Y2H1.txt",
         [
              f"data/real world/MultiMagna/yeast{i}_Y2H1.txt" for i in [
-                 5, 10, 15, 20, 25]
+                 5]#, 10, 15, 20, 25]
         ]
     ]
     xlabel = "yeast_Y2H1"
@@ -364,12 +420,16 @@ def real_noise():
     graphs = graphss(tmp)
     print(graphs)
     #run=[9,13,14,15]
-    run=[15]
-    iters =1
-    accs=[0,1,2,3,4,5]
+    run=[
+        Algs.CUGAL_CHACHE_SPARSE_LOG.value,
+        Algs.FUGAL.value,
+    ]
+    iters = 3
+    #accs=[0,1,2,3,4,5]
     noises = [
         1.0
     ]
+
 
     #s_trans = (2, 1, 0, 3)
 
@@ -379,39 +439,90 @@ def real_noise():
 
 def rgraphs(gnames):
     return [
-        (gen.loadnx, (f"data/{name}.txt",)) for name in gnames
+        (gen.loadnx, [(f"data/{name}.txt",)]) for name in gnames
     ]
 
-
-@ ex.named_config
-def cugal_test():
+@ex.named_config
+def OT_test():
     run = [
-        Algs.CUGAL_SPARSE.value
+        #Algs.CUGAL_CHACHE_SPARSE.value,
+        #Algs.CUGAL_CHACHE_SPARSE_LOG.value,
+        #Algs.CUGAL_CHACHE_SPARSE_MIX.value,
+        Algs.FUGAL.value,
+        Algs.CUGAL_OT.value,
+        #Algs.CUGAL_OT_GPU.value
     ]
     iters = 1
     graph_names = [
         Data.CA_NETSCIENCE.value[0]
+        ]
+    
+    graphs = rgraphs(graph_names)
+
+    noises = [ 
+        0.00,
+        0.05,
+        0.10,
+        0.15,
+        0.20,
+        0.25,
+        ]        
+
+    noise_type = 1
+
+@ ex.named_config
+def hungarian_test():
+    run = [
+        Algs.CUGAL_HUNGARIAN_CULAP.value,
     ]
-    graphs = rgraphs(graph_names)[0]
+    iters = 1
+    graph_names = [
+        Data.BIO_DMELA.value,
+    ]
+    graphs = rgraphs(graph_names)
+    noises = [ 0.10 ]
+
+@ ex.named_config
+def cugal_test():
+    run = [
+        Algs.CUGAL_CHACHE_SPARSE_LOG.value,
+        Algs.CUGAL_LOG_HUN_MORE_GREED.value,
+        Algs.CUGAL_LOG_HUN_SPARSE.value,
+    ]
+    iters = 1
+    graph_names = [
+        Data.INF_EUROROAD.value,
+    ]
+    graphs = rgraphs(graph_names) 
+    #accs=[0,1,2,3,4,5]
     noises = [
-        0.00
+        0, 0.05, 0.10,
     ]
+    noise_type = 1
 
 @ ex.named_config
 def fugal_test():
-    run = [0]
+    run = [
+        Algs.FUGAL.value,
+        ]
     iters = 1
-    graph_names = [ "ca-netscience" ]
+    graph_names = [
+        Data.CA_GRQC.value
+    ]
     graphs = rgraphs(graph_names)
-    noises = [ 0.00 ]
+    noises = [ 0.00, 0.05, 0.10, 0.15, 0.20, 0.25 ]
 
 @ ex.named_config
 def real():
 
     #run = [1, 2, 3, 4, 5, 6]
-    run = [Algs.CUGAL]
+    run = [
+        Algs.FUGAL.value,
+        #Algs.CUGAL_CHACHE_SPARSE_LOG.value,
+        #Algs.CUGAL_CHACHE_SPARSE_MIX.value,
+    ]
     #run=[13,14,15]
-    iters = 2
+    iters = 1
     #print("start")
     graph_names = [             # n     / e
         #"ca-netscience",       # 379   / 914   / connected
@@ -446,21 +557,17 @@ def real():
     print("done")
     graphs = rgraphs(graph_names)
 
-    noises = [
-        #0.00,
-        #0.01,
-        #0.02,
-        # 0.03,
-        # 0.04,
-        # 0.05,
+    accs=[0, 1, 2, 3, 4, 5]
 
-        #0.00,
-        #0.05,
-        #0.10,
-        #0.15,
-        #0.20,
-        0.25,
+    noises = [
+        0.00,
+        #0.01,
+        0.02,
+        # 0.03,
+        0.04,
+        0.06,
     ]
+    noise_type = 1
 
 
 @ ex.named_config
@@ -471,7 +578,21 @@ def synthetic():
     iters = 1
     #run = [1,6,9,10,11,14,15]
     #run = [1,6,14,15] #9,10,11
-    run=[1]
+    run=[
+        Algs.FUGAL.value,
+        Algs.CUGAL_CHACHE_SPARSE_MIX.value,
+        #Algs.CUGAL_MIX_FW_010.value,
+        #Algs.CUGAL_MIX_FW_020.value,
+        Algs.CUGAL_HUNGARIAN_MORE_GREED.value,
+        #Algs.CUGAL_MIX_HUN_MORE_GREED_FW_10.value,
+        #Algs.CUGAL_HUNGARIAN_MORE_GREED_FW_20.value,
+        Algs.CUGAL_CHACHE_SPARSE_LOG.value,
+        #Algs.CUGAL_LOG_FW_10.value,
+        #Algs.CUGAL_LOG_FW_20.value,
+        Algs.CUGAL_LOG_HUN_MORE_GREED.value,
+        #Algs.CUGAL_LOG_HUN_MORE_GREED_FW_10.value,
+        #Algs.CUGAL_LOG_HUN_MORE_GREED_FW_20.value,
+    ]
     graph_names = [
         #"arenas",
         #"powerlaw",
@@ -488,59 +609,23 @@ def synthetic():
     ]
 
     graphs = [
-        # with arenasish load=[1-,1-]
-        # 91-
-        #(gen.loadnx, ('data/arenas.txt',)),
-        #(nx.powerlaw_cluster_graph, (1133, 5, 0.5)),
-        # 92-0
-        #(nx.newman_watts_strogatz_graph, (1133, 7, 0.5)),
-        #(nx.watts_strogatz_graph, (1133, 10, 0.5)),
-        # 92-1
-        #(nx.gnp_random_graph, (100, 0.5)),
-        #(nx.gnp_random_graph, (1133, 0.009)),
-        #(nx.barabasi_albert_graph, (1133, 5)),
-        #(nx.algorithms.bipartite.random_graph,(800,100,0.02)),
-        #(nx.algorithms.bipartite.random_graph,(700,200,0.03)),
-        #(nx.algorithms.bipartite.random_graph,(200,100,0.3)),
-        #(nx.algorithms.bipartite.random_graph,(600,300,0.04)),
-        #(nx.algorithms.bipartite.random_graph,(500,400,0.05)),
-        #(nx.algorithms.bipartite.random_graph,(450,450,0.06)),
-        #(nx.algorithms.bipartite.random_graph,(200,700,0.09)),
-        #(nx.algorithms.bipartite.random_graph,(800,600,0.05))
-        nx.newman_watts_strogatz_graph, ( 128, 7, 0.5),
-        nx.newman_watts_strogatz_graph, ( 256, 7, 0.5),
-        nx.newman_watts_strogatz_graph, ( 512, 7, 0.5),
-        nx.newman_watts_strogatz_graph, (1024, 7, 0.5),
-        #nx.newman_watts_strogatz_graph, (2048, 7, 0.5),
-        #(nx.newman_watts_strogatz_graph, (4096, 7,0.5),
-        #(nx.newman_watts_strogatz_graph, (8192, 7,0.5),
-        #
-        #(nx.newman_watts_strogatz_graph, (1024, 50,0.5)),
-        #(nx.newman_watts_strogatz_graph, (1024, 100,0.5)),
-        #(nx.newman_watts_strogatz_graph, (1024, 200,0.5)),
-        #(nx.newman_watts_strogatz_graph, (1024, 40,0.5)),
-        #
+        #newman_watts:
+        [nx.newman_watts_strogatz_graph, (1000, 7, 0.03)] for p in np.linspace(0.05, 0.25, num=20)
+        #[nx.newman_watts_strogatz_graph, (1000, k, 0.5)] for k in [7, 10, 15, 25, 50, 100]
+        #Barabasi:
+        #[nx.barabasi_albert_graph, (1000, m)] for m in [3, 5, 7, 10, 15, 25, 50, 100]
+        #Erdos-Renyi:
+        #[nx.gnp_random_graph, (1000, p)] for p in np.linspace(0.001, 0.005, num=5)
+        #Powerlaw:
+        #[nx.powerlaw_cluster_graph, (1000, 2, p)] for p in np.linspace(0.2, 1, num=5)
+        #Lobster:
+        #[nx.random_lobster, (1000, 0.5, 0.5)] for p in np.linspace(0.2, 0.8, num=1)
     ]
 
     noises = [
-        #0.00,
-        0.01,
-        #0.02,
-        #0.03,
-        #0.04,
-        #0.05,
-        #0.06,
-        #0.07,
-        #0.08,
-        #0.09,
-        #0.10
-
-        #0.1,
-        #0.15,
-        #0.3
-       # 0.1,
-        #0.15
+        0.05
     ]
+    accs = [0, 1, 2, 3, 4, 5]
 
 
 @ ex.named_config
